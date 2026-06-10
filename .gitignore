@@ -1,0 +1,32 @@
+## .NET Core / ASP.NET Core
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Ob]j/
+Log/
+Logs/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## JetBrains / VS Code
+.idea/
+.vscode/
+
+## Secrets & Configs
+appsettings.Development.json
+.env
+google-credentials.json
+*.pfx
+
+## Test Results
+TestResults/
