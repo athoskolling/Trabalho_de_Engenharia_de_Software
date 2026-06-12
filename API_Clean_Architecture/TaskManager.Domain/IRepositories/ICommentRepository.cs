@@ -1,6 +1,6 @@
 using TaskManager.Domain.Entities;
 
-namespace TaskManager.Domain.Repositories;
+namespace TaskManager.Domain.IRepositories;
 
 public interface ICommentRepository
 {
