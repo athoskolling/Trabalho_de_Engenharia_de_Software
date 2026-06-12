@@ -4,7 +4,7 @@ namespace TaskManager.Application.Dtos.Task;
 
 public class TaskFilterDto
 {
-    public TaskStatus? Status { get; set; }
+    public TaskState? Status { get; set; }
 
     public TaskPriority? Priority { get; set; }
 

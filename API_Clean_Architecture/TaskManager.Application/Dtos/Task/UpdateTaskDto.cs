@@ -8,7 +8,7 @@ public class UpdateTaskDto
 
     public string? Description { get; set; }
 
-    public TaskStatus? Status { get; set; }
+    public TaskState? Status { get; set; }
 
     public TaskPriority? Priority { get; set; }
 

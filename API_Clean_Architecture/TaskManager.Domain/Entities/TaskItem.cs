@@ -10,8 +10,7 @@ public class TaskItem
 
     public string Description { get; set; } = string.Empty;
 
-    public TaskStatus Status { get; set; } = TaskStatus.Pending;
-
+    public TaskState Status { get; set; } = TaskState.Pending;
     public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
     public DateTime? DueDate { get; set; }
