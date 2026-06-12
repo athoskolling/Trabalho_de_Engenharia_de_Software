@@ -1,6 +1,6 @@
 using TaskManager.Application.Dtos.Task;
 
-namespace TaskManager.Application.Services;
+namespace TaskManager.Application.Services.Interfaces;
 
 public interface ITaskService
 {
