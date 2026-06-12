@@ -22,6 +22,7 @@ Quando o usuário disser o comando **`finalizar sessão`** (ou variação simila
 1. **Salvar Todo o Conteúdo:** Garantir que todos os arquivos modificados na sessão estejam gravados.
 2. **Atualizar Contexto:** Editar o arquivo `SESSION_CONTEXT.md` no diretório raiz para refletir o progresso atualizado.
 3. **Gerenciar Branches Diárias:**
+   * Deve criar uma branch e mantê-la até o final do projeto, para guardar os .md de explicação, agentes e contexto. Sempre será avisado quando utilizar essa branch para salvar o arquivo a ser criado.
    * Obter a data atual do sistema (formato: `yyyy-MM-dd`).
    * Se a branch diária `daily/yyyy-MM-dd` não existir, criá-la e alternar para ela a partir de `develop`. Se já existir, apenas usá-la.
    * *Regra de PR:* O usuário será o único responsável por criar os Pull Requests (PR) desta branch diária para `develop`, e de `develop` para `main` na plataforma remota (GitHub).
