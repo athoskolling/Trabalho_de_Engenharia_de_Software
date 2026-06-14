@@ -14,4 +14,3 @@ public class UserResponseDto
 
     public DateTime CreatedAt { get; set; }
 }
-namespace TaskManager.Application.Dtos.User;
