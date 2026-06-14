@@ -14,3 +14,4 @@ public class CreateTaskDto
 
     public Guid? AssignedToId { get; set; }
 }
+namespace TaskManager.Application.Dtos.Task;

@@ -12,3 +12,4 @@ public class CreateUserDto
 
     public UserRole Role { get; set; } = UserRole.User;
 }
+namespace TaskManager.Application.Dtos.User;
