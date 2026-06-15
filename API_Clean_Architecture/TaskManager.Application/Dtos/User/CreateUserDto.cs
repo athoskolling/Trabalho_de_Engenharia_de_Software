@@ -4,12 +4,10 @@ namespace TaskManager.Application.Dtos.User;
 
 public class CreateUserDto
 {
-    public string Name { get; set; } = string.Empty;
-
-    public string Email { get; set; } = string.Empty;
-
-    public string Password { get; set; } = string.Empty;
-
-    public UserRole Role { get; set; } = UserRole.User;
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public UserRole Role { get; set; }
 }
-namespace TaskManager.Application.Dtos.User;
+
+
