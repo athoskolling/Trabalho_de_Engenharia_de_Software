@@ -12,4 +12,3 @@ public class TaskFilterDto
 
     public Guid? AssignedToId { get; set; }
 }
-namespace TaskManager.Application.Dtos.Task;
