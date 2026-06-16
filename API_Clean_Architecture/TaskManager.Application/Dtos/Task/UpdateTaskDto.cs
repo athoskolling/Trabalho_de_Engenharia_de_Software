@@ -16,3 +16,4 @@ public class UpdateTaskDto
 
     public Guid? AssignedToId { get; set; }
 }
+namespace TaskManager.Application.Dtos.Task;

@@ -12,3 +12,4 @@ public class CommentResponseDto
 
     public UserResponseDto User { get; set; } = null!;
 }
+namespace TaskManager.Application.Dtos.Comment;
