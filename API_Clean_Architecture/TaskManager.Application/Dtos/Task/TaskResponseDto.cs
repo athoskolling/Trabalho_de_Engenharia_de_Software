@@ -11,7 +11,7 @@ public class TaskResponseDto
 
     public string Description { get; set; } = string.Empty;
 
-    public TaskState Status { get; set; }
+    public TaskState State { get; set; }
 
     public TaskPriority Priority { get; set; }
 
