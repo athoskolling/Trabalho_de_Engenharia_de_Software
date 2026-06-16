@@ -1,5 +1,4 @@
 using TaskManager.Application.Dtos.Task;
-using TaskManager.Application.Dtos.User;
 using TaskManager.Application.Services.Interfaces;
 using TaskManager.Domain.Entities;
 using TaskManager.Domain.Enums;
@@ -52,6 +51,18 @@ public class TaskService : ITaskService
     {
         var tasks = await _taskRepository.GetAllAsync();
 
+        if (filter.State.HasValue)
+            tasks = tasks.Where(task => task.State == filter.State.Value);
+
+        if (filter.Priority.HasValue)
+            tasks = tasks.Where(task => task.Priority == filter.Priority.Value);
+
+        if (filter.DueBefore.HasValue)
+            tasks = tasks.Where(task => task.DueDate <= filter.DueBefore.Value);
+
+        if (filter.AssignedToId.HasValue)
+            tasks = tasks.Where(task => task.AssignedToId == filter.AssignedToId.Value);
+
         return tasks.Select(MapToResponseDto);
     }
 
@@ -65,6 +76,13 @@ public class TaskService : ITaskService
 
         if (task is null)
             throw new KeyNotFoundException("Task not found.");
+
+        var isCreator = task.CreatedById == requestingUserId;
+        var isAssigned = task.AssignedToId == requestingUserId;
+        var isAdmin = requestingUserRole == UserRole.Admin.ToString();
+
+        if (!isCreator && !isAssigned && !isAdmin)
+            throw new UnauthorizedAccessException("You are not allowed to update this task.");
 
         if (dto.Title is not null)
             task.Title = dto.Title;
@@ -95,6 +113,17 @@ public class TaskService : ITaskService
         Guid requestingUserId,
         string requestingUserRole)
     {
+        var task = await _taskRepository.GetByIdAsync(id);
+
+        if (task is null)
+            throw new KeyNotFoundException("Task not found.");
+
+        var isCreator = task.CreatedById == requestingUserId;
+        var isAdmin = requestingUserRole == UserRole.Admin.ToString();
+
+        if (!isCreator && !isAdmin)
+            throw new UnauthorizedAccessException("You are not allowed to delete this task.");
+
         var deleted = await _taskRepository.DeleteAsync(id);
 
         if (!deleted)

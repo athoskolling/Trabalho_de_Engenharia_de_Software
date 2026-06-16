@@ -75,7 +75,14 @@ public class UserService : IUserService
             user.Name = dto.Name;
 
         if (dto.Email is not null)
+        {
+            var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
+
+            if (existingUser is not null && existingUser.Id != user.Id)
+                throw new InvalidOperationException("Email already in use.");
+
             user.Email = dto.Email;
+        }
 
         var updatedUser = await _userRepository.UpdateAsync(user);
 

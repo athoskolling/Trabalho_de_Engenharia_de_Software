@@ -17,28 +17,41 @@ public class CommentService : ICommentService
     }
 
     public async Task<CommentResponseDto> AddAsync(
-        Guid taskId,
-        CreateCommentDto dto,
-        Guid userId)
+    Guid taskId,
+    CreateCommentDto dto,
+    Guid userId)
+{
+    var comment = new Comment
     {
-        var comment = new Comment
-        {
-            Id = Guid.NewGuid(),
-            Content = dto.Content,
-            TaskItemId = taskId,
-            UserId = userId,
-            CreatedAt = DateTime.UtcNow
-        };
+        Id = Guid.NewGuid(),
+        Content = dto.Content,
+        TaskItemId = taskId,
+        UserId = userId,
+        CreatedAt = DateTime.UtcNow
+    };
 
-        var createdComment = await _commentRepository.AddAsync(comment);
+    var createdComment = await _commentRepository.AddAsync(comment);
 
-        return new CommentResponseDto
+    var commentWithUser = await _commentRepository.GetByIdAsync(createdComment.Id);
+
+    if (commentWithUser is null)
+        throw new KeyNotFoundException("Comment not found.");
+
+    return new CommentResponseDto
+    {
+        Id = commentWithUser.Id,
+        Content = commentWithUser.Content,
+        CreatedAt = commentWithUser.CreatedAt,
+        User = new UserResponseDto
         {
-            Id = createdComment.Id,
-            Content = createdComment.Content,
-            CreatedAt = createdComment.CreatedAt
-        };
-    }
+            Id = commentWithUser.User.Id,
+            Name = commentWithUser.User.Name,
+            Email = commentWithUser.User.Email,
+            Role = commentWithUser.User.Role,
+            CreatedAt = commentWithUser.User.CreatedAt
+        }
+    };
+}
 
     public async Task<IEnumerable<CommentResponseDto>> GetByTaskIdAsync(Guid taskId)
     {

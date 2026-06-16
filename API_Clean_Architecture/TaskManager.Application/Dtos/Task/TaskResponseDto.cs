@@ -25,4 +25,3 @@ public class TaskResponseDto
 
     public DateTime UpdatedAt { get; set; }
 }
-namespace TaskManager.Application.Dtos.Task;
