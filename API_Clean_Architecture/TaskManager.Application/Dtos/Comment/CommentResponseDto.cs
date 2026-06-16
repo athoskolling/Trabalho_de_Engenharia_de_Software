@@ -8,5 +8,6 @@ public class CommentResponseDto
     public Guid Id { get; set; }
     public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
-    public UserResponseDto User { get; set; } = new UserResponseDto(); 
+
+    public UserResponseDto User { get; set; } = null!;
 }
