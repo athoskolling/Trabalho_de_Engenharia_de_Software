@@ -1,6 +1,6 @@
 # TaskManager API 
 
-API desenvolvida em **.NET 8** seguindo as diretrizes e boas práticas de **Clean Architecture** e princípios do SOLID.
+API desenvolvida em **.NET 10** seguindo as diretrizes e boas práticas de **Clean Architecture** e princípios do SOLID.
 
 ---
 
