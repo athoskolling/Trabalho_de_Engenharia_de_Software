@@ -1,9 +1,8 @@
+namespace TaskManager.Application.Dtos.Task;
 using TaskManager.Application.Dtos.User;
 using TaskManager.Domain.Enums;
 
-namespace TaskManager.Application.Dtos.Task;
-
-public class TaskResponseDto
+public class CommentResponseDto
 {
     public Guid Id { get; set; }
 
@@ -11,7 +10,7 @@ public class TaskResponseDto
 
     public string Description { get; set; } = string.Empty;
 
-    public TaskState Status { get; set; }
+    public TaskState State { get; set; }
 
     public TaskPriority Priority { get; set; }
 
@@ -22,7 +21,5 @@ public class TaskResponseDto
     public UserResponseDto CreatedBy { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
-
     public DateTime UpdatedAt { get; set; }
 }
-namespace TaskManager.Application.Dtos.Task;

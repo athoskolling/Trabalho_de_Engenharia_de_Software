@@ -4,11 +4,10 @@ namespace TaskManager.Application.Dtos.Task;
 
 public class UpdateTaskDto
 {
-    public string? Title { get; set; } //todos os campos são opcionais pois o usuário pode querer atualizar apenas um dos campos
-
+    public string? Title { get; set; }
     public string? Description { get; set; }
 
-    public TaskState? Status { get; set; }
+    public TaskState? State { get; set; }
 
     public TaskPriority? Priority { get; set; }
 
@@ -16,4 +15,3 @@ public class UpdateTaskDto
 
     public Guid? AssignedToId { get; set; }
 }
-namespace TaskManager.Application.Dtos.Task;

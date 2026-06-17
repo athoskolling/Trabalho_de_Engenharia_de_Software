@@ -1,6 +1,6 @@
 using TaskManager.Application.Dtos.Auth;
 
-namespace TaskManager.Application.Services;
+namespace TaskManager.Application.Services.Interfaces;
 
 public interface IAuthService
 {

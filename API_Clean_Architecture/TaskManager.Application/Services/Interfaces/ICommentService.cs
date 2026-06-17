@@ -1,6 +1,6 @@
 using TaskManager.Application.Dtos.Comment;
 
-namespace TaskManager.Application.Services;
+namespace TaskManager.Application.Services.Interfaces;
 
 public interface ICommentService
 {
