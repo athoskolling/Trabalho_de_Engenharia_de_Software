@@ -51,9 +51,19 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Database
+var useInMemory = builder.Configuration["UseInMemoryDatabase"] == "true";
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    if (useInMemory)
+    {
+        options.UseInMemoryDatabase("TaskManagerMemory");
+    }
+    else
+    {
+        options.UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"));
+    }
+});
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -97,25 +107,34 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     
-    int retries = 10;
-    for (int i = 1; i <= retries; i++)
+    if (useInMemory)
     {
-        try
+        logger.LogInformation("Using In-Memory Database. Ensuring database is created...");
+        dbContext.Database.EnsureCreated();
+        logger.LogInformation("In-Memory Database initialized successfully.");
+    }
+    else
+    {
+        int retries = 10;
+        for (int i = 1; i <= retries; i++)
         {
-            logger.LogInformation("Applying migrations (attempt {Attempt}/{Retries})...", i, retries);
-            dbContext.Database.Migrate();
-            logger.LogInformation("Migrations applied successfully.");
-            break;
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning(ex, "Failed to apply migrations. Retrying in 5 seconds...");
-            if (i == retries)
+            try
             {
-                logger.LogError(ex, "Could not apply migrations after {Retries} attempts. Application will terminate.", retries);
-                throw;
+                logger.LogInformation("Applying migrations (attempt {Attempt}/{Retries})...", i, retries);
+                dbContext.Database.Migrate();
+                logger.LogInformation("Migrations applied successfully.");
+                break;
             }
-            System.Threading.Thread.Sleep(5000);
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Failed to apply migrations. Retrying in 5 seconds...");
+                if (i == retries)
+                {
+                    logger.LogError(ex, "Could not apply migrations after {Retries} attempts. Application will terminate.", retries);
+                    throw;
+                }
+                System.Threading.Thread.Sleep(5000);
+            }
         }
     }
 }
