@@ -2,7 +2,7 @@ namespace TaskManager.Application.Dtos.Task;
 using TaskManager.Application.Dtos.User;
 using TaskManager.Domain.Enums;
 
-public class CommentResponseDto
+public class TaskResponseDto
 {
     public Guid Id { get; set; }
 
