@@ -9,7 +9,7 @@ using TaskManager.Domain.IServices;
 
 using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Repositories;
-using TaskManager.Infrastructure.Services;
+using TaskManager.Infrastructure.GoogleCalendar;
 
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -84,7 +84,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICalendarService, GoogleCalendarService>();
+builder.Services.AddScoped<IGoogleCalendar, GoogleCalendarService>();
 
 var jwtSecret = builder.Configuration["Jwt:Secret"];
 

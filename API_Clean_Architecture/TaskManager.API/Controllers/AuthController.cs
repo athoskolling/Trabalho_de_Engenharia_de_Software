@@ -12,11 +12,11 @@ namespace TaskManager.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    private readonly ICalendarService _calendarService;
+    private readonly IGoogleCalendar _calendarService;
 
     public AuthController(
         IAuthService authService,
-        ICalendarService calendarService)
+        IGoogleCalendar calendarService)
     {
         _authService = authService;
         _calendarService = calendarService;

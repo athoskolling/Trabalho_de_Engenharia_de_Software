@@ -12,13 +12,13 @@ namespace TaskManager.Tests;
 public class TaskServiceTests
 {
     private readonly Mock<ITaskRepository> _taskRepositoryMock;
-    private readonly Mock<ICalendarService> _calendarServiceMock;
+    private readonly Mock<IGoogleCalendar> _calendarServiceMock;
     private readonly TaskService _taskService;
 
     public TaskServiceTests()
     {
         _taskRepositoryMock = new Mock<ITaskRepository>();
-        _calendarServiceMock = new Mock<ICalendarService>();
+        _calendarServiceMock = new Mock<IGoogleCalendar>();
         _taskService = new TaskService(_taskRepositoryMock.Object, _calendarServiceMock.Object);
     }
 

@@ -1,6 +1,6 @@
 namespace TaskManager.Domain.IServices;
 
-public interface ICalendarService
+public interface IGoogleCalendar
 {
     Task CreateEventAsync(Guid userId, string title, string description, DateTime? dueDate);
     Task<string> GetGoogleAuthorizationUrlAsync(Guid userId, string redirectUri);

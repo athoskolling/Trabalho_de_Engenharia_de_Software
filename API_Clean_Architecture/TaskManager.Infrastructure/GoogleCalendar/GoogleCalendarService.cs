@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 using TaskManager.Domain.IRepositories;
 using TaskManager.Domain.IServices;
 
-namespace TaskManager.Infrastructure.Services;
+namespace TaskManager.Infrastructure.GoogleCalendar;
 
-public class GoogleCalendarService : ICalendarService
+public class GoogleCalendarService : IGoogleCalendar
 {
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;

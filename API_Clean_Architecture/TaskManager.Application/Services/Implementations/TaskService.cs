@@ -11,11 +11,11 @@ namespace TaskManager.Application.Services.Implementations;
 public class TaskService : ITaskService
 {
     private readonly ITaskRepository _taskRepository;
-    private readonly ICalendarService _calendarService;
+    private readonly IGoogleCalendar _calendarService;
 
     public TaskService(
         ITaskRepository taskRepository,
-        ICalendarService calendarService)
+        IGoogleCalendar calendarService)
     {
         _taskRepository = taskRepository;
         _calendarService = calendarService;
