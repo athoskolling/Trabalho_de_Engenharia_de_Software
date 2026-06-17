@@ -4,8 +4,7 @@ namespace TaskManager.Application.Dtos.Task;
 
 public class UpdateTaskDto
 {
-    public string? Title { get; set; } //todos os campos são opcionais pois o usuário pode querer atualizar apenas um dos campos
-
+    public string? Title { get; set; }
     public string? Description { get; set; }
 
     public TaskState? State { get; set; }
