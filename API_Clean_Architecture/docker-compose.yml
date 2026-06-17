@@ -2,19 +2,35 @@ services:
   postgres:
     image: postgres:15
     container_name: taskmanager-postgres
-
     restart: unless-stopped
-
     environment:
       POSTGRES_DB: taskmanager
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5433:5432"
-
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  webapi:
+    image: taskmanager-api:latest
+    container_name: taskmanager-api
+    build:
+      context: .
+      dockerfile: TaskManager.API/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=taskmanager;Username=postgres;Password=postgres
+      - Jwt__Secret=minha-chave-super-secreta-com-mais-de-32-caracteres
+      - Jwt__Issuer=TaskManager.API
+      - Jwt__Audience=TaskManager.Client
+      - Jwt__ExpirationMinutes=60
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Google__ClientId=${GOOGLE_CLIENT_ID:-SUA_GOOGLE_CLIENT_ID}
+      - Google__ClientSecret=${GOOGLE_CLIENT_SECRET:-SUA_GOOGLE_CLIENT_SECRET}
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

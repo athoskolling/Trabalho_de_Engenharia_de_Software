@@ -70,6 +70,17 @@ public class CommentService : ICommentService
         Guid requestingUserId,
         string requestingUserRole)
     {
+        var comment = await _commentRepository.GetByIdAsync(commentId);
+
+        if (comment is null)
+            throw new KeyNotFoundException("Comment not found.");
+
+        var isOwner = comment.UserId == requestingUserId;
+        var isAdmin = requestingUserRole == UserRole.Admin.ToString();
+
+        if (!isOwner && !isAdmin)
+            throw new UnauthorizedAccessException("You are not allowed to delete this comment.");
+
         var deleted = await _commentRepository.DeleteAsync(commentId);
 
         if (!deleted)

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManager.Domain\TaskManager.Domain.csproj" />
@@ -6,19 +6,19 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.75.0" />
-    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.74.0.4154" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+    <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3421" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>

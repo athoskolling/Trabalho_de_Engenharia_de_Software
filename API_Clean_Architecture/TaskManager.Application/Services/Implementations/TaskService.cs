@@ -1,18 +1,24 @@
 using TaskManager.Application.Dtos.Task;
+using TaskManager.Application.Dtos.User;
 using TaskManager.Application.Services.Interfaces;
 using TaskManager.Domain.Entities;
 using TaskManager.Domain.Enums;
 using TaskManager.Domain.IRepositories;
+using TaskManager.Domain.IServices;
 
 namespace TaskManager.Application.Services.Implementations;
 
 public class TaskService : ITaskService
 {
     private readonly ITaskRepository _taskRepository;
+    private readonly ICalendarService _calendarService;
 
-    public TaskService(ITaskRepository taskRepository)
+    public TaskService(
+        ITaskRepository taskRepository,
+        ICalendarService calendarService)
     {
         _taskRepository = taskRepository;
+        _calendarService = calendarService;
     }
 
     public async Task<TaskResponseDto> CreateAsync(
@@ -33,6 +39,10 @@ public class TaskService : ITaskService
         };
 
         var createdTask = await _taskRepository.AddAsync(task);
+
+        // Agendar evento no Google Calendar
+        var targetUserId = task.AssignedToId ?? createdById;
+        await _calendarService.CreateEventAsync(targetUserId, task.Title, task.Description, task.DueDate);
 
         return MapToResponseDto(createdTask);
     }
@@ -105,6 +115,10 @@ public class TaskService : ITaskService
 
         var updatedTask = await _taskRepository.UpdateAsync(task);
 
+        // Agendar evento no Google Calendar
+        var targetUserId = task.AssignedToId ?? requestingUserId;
+        await _calendarService.CreateEventAsync(targetUserId, task.Title, task.Description, task.DueDate);
+
         return MapToResponseDto(updatedTask);
     }
 
@@ -141,7 +155,23 @@ public class TaskService : ITaskService
             Priority = task.Priority,
             DueDate = task.DueDate,
             CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
+            UpdatedAt = task.UpdatedAt,
+            AssignedTo = task.AssignedTo != null ? new UserResponseDto
+            {
+                Id = task.AssignedTo.Id,
+                Name = task.AssignedTo.Name,
+                Email = task.AssignedTo.Email,
+                Role = task.AssignedTo.Role,
+                CreatedAt = task.AssignedTo.CreatedAt
+            } : null,
+            CreatedBy = task.CreatedBy != null ? new UserResponseDto
+            {
+                Id = task.CreatedBy.Id,
+                Name = task.CreatedBy.Name,
+                Email = task.CreatedBy.Email,
+                Role = task.CreatedBy.Role,
+                CreatedAt = task.CreatedBy.CreatedAt
+            } : null!
         };
     }
 }

@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 using TaskManager.Application.Services.Implementations;
 using TaskManager.Application.Services.Interfaces;
 
 using TaskManager.Domain.IRepositories;
+using TaskManager.Domain.IServices;
 
 using TaskManager.Infrastructure.Persistence;
 using TaskManager.Infrastructure.Repositories;
+using TaskManager.Infrastructure.Services;
 
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,7 +22,33 @@ builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT desta maneira: Bearer seu_token_jwt"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -30,12 +59,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICalendarService, GoogleCalendarService>();
 
 var jwtSecret = builder.Configuration["Jwt:Secret"];
 
@@ -60,20 +91,38 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-//migrations
+//migrations with retry
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    dbContext.Database.Migrate();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
+    int retries = 10;
+    for (int i = 1; i <= retries; i++)
+    {
+        try
+        {
+            logger.LogInformation("Applying migrations (attempt {Attempt}/{Retries})...", i, retries);
+            dbContext.Database.Migrate();
+            logger.LogInformation("Migrations applied successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to apply migrations. Retrying in 5 seconds...");
+            if (i == retries)
+            {
+                logger.LogError(ex, "Could not apply migrations after {Retries} attempts. Application will terminate.", retries);
+                throw;
+            }
+            System.Threading.Thread.Sleep(5000);
+        }
+    }
 }
 
 // Swagger
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

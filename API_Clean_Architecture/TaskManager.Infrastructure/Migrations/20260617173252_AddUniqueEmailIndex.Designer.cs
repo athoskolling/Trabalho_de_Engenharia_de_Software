@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskManager.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using TaskManager.Infrastructure.Persistence;
 namespace TaskManager.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617173252_AddUniqueEmailIndex")]
+    partial class AddUniqueEmailIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,12 +143,6 @@ namespace TaskManager.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("GoogleAccessToken")
-                        .HasColumnType("text");
-
-                    b.Property<string>("GoogleRefreshToken")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")

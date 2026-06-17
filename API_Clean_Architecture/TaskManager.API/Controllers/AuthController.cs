@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TaskManager.Application.Dtos.Auth;
 using TaskManager.Application.Services.Interfaces;
+using TaskManager.Domain.IServices;
 
 namespace TaskManager.API.Controllers;
 
@@ -11,10 +12,14 @@ namespace TaskManager.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ICalendarService _calendarService;
 
-    public AuthController(IAuthService authService)
+    public AuthController(
+        IAuthService authService,
+        ICalendarService calendarService)
     {
         _authService = authService;
+        _calendarService = calendarService;
     }
 
     [AllowAnonymous]
@@ -36,5 +41,38 @@ public class AuthController : ControllerBase
         await _authService.LogoutAsync(userId);
 
         return NoContent();
+    }
+
+    [AllowAnonymous]
+    [HttpPost("refresh")]
+    public async Task<ActionResult<LoginResponseDto>> Refresh(RefreshRequestDto request)
+    {
+        var response = await _authService.RefreshAsync(request.RefreshToken);
+
+        return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("google/login")]
+    public async Task<IActionResult> GoogleLogin()
+    {
+        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        var redirectUri = Url.Action(nameof(GoogleCallback), "Auth", null, Request.Scheme);
+
+        var authUrl = await _calendarService.GetGoogleAuthorizationUrlAsync(userId, redirectUri!);
+
+        return Ok(new { url = authUrl });
+    }
+
+    [AllowAnonymous]
+    [HttpGet("google/callback")]
+    public async Task<IActionResult> GoogleCallback([FromQuery] string code, [FromQuery] string state)
+    {
+        var userId = Guid.Parse(state);
+        var redirectUri = Url.Action(nameof(GoogleCallback), "Auth", null, Request.Scheme);
+
+        await _calendarService.ConnectGoogleAccountAsync(userId, code, redirectUri!);
+
+        return Content("Google Calendar connected successfully! You can close this window now.");
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Domain", "TaskM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Infrastructure", "TaskManager.Infrastructure\TaskManager.Infrastructure.csproj", "{8F0EE24A-F9DF-40A0-801F-EF3C2BF30E5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager.Tests", "TaskManager.Tests\TaskManager.Tests.csproj", "{DC9C0116-E38D-4997-B76D-24AC3F92D11D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{8F0EE24A-F9DF-40A0-801F-EF3C2BF30E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F0EE24A-F9DF-40A0-801F-EF3C2BF30E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F0EE24A-F9DF-40A0-801F-EF3C2BF30E5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9C0116-E38D-4997-B76D-24AC3F92D11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9C0116-E38D-4997-B76D-24AC3F92D11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9C0116-E38D-4997-B76D-24AC3F92D11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9C0116-E38D-4997-B76D-24AC3F92D11D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
