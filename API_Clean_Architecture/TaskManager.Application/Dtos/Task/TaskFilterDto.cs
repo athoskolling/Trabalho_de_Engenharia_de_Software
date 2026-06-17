@@ -9,6 +9,5 @@ public class TaskFilterDto
     public TaskPriority? Priority { get; set; }
 
     public DateTime? DueBefore { get; set; }
-
     public Guid? AssignedToId { get; set; }
 }

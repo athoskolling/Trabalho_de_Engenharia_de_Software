@@ -83,6 +83,11 @@ public class UserService : IUserService
 
             user.Email = dto.Email;
         }
+        
+        if (dto.Password is not null)
+        {
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+        }
 
         var updatedUser = await _userRepository.UpdateAsync(user);
 
