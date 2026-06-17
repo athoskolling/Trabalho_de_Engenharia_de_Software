@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskManager.Application.Dtos.Comment;
 using TaskManager.Application.Services.Interfaces;
 
 namespace TaskManager.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/comments")]
 public class CommentsController : ControllerBase
 {
@@ -20,8 +23,7 @@ public class CommentsController : ControllerBase
         Guid taskId,
         CreateCommentDto dto)
     {
-        // Temporário até JWT
-        var userId = Guid.NewGuid();
+        var userId = GetAuthenticatedUserId();
 
         var comment = await _commentService.AddAsync(
             taskId,
@@ -43,9 +45,8 @@ public class CommentsController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // Temporário até JWT
-        var requestingUserId = Guid.NewGuid();
-        var requestingUserRole = "Admin";
+        var requestingUserId = GetAuthenticatedUserId();
+        var requestingUserRole = GetAuthenticatedUserRole();
 
         await _commentService.DeleteAsync(
             id,
@@ -53,5 +54,16 @@ public class CommentsController : ControllerBase
             requestingUserRole);
 
         return NoContent();
+    }
+
+    private Guid GetAuthenticatedUserId()
+    {
+        return Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    }
+
+    private string GetAuthenticatedUserRole()
+    {
+        return User.FindFirst(ClaimTypes.Role)!.Value;
     }
 }

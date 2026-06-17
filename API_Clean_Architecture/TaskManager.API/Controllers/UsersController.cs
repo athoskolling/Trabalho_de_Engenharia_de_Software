@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskManager.Application.Dtos.User;
 using TaskManager.Application.Services.Interfaces;
 
 namespace TaskManager.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/users")]
 public class UsersController : ControllerBase
 {
@@ -15,6 +18,7 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<UserResponseDto>> Create(CreateUserDto dto)
     {
@@ -45,9 +49,8 @@ public class UsersController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<UserResponseDto>> Update(Guid id, UpdateUserDto dto)
     {
-        // Temporário até JWT estar pronto, dai coloca pra pegar do token
-        var requestingUserId = id;
-        var requestingUserRole = "Admin";
+        var requestingUserId = GetAuthenticatedUserId();
+        var requestingUserRole = GetAuthenticatedUserRole();
 
         var user = await _userService.UpdateAsync(
             id,
@@ -58,11 +61,23 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _userService.DeleteAsync(id);
 
         return NoContent();
+    }
+
+    private Guid GetAuthenticatedUserId()
+    {
+        return Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    }
+
+    private string GetAuthenticatedUserRole()
+    {
+        return User.FindFirst(ClaimTypes.Role)!.Value;
     }
 }

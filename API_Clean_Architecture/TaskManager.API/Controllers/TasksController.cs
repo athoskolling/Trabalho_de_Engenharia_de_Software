@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskManager.Application.Dtos.Task;
 using TaskManager.Application.Services.Interfaces;
 
 namespace TaskManager.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/tasks")]
 public class TasksController : ControllerBase
 {
@@ -18,8 +21,7 @@ public class TasksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TaskResponseDto>> Create(CreateTaskDto dto)
     {
-        // Temporário até JWT estar pronto
-        var createdById = Guid.NewGuid();
+        var createdById = GetAuthenticatedUserId();
 
         var task = await _taskService.CreateAsync(dto, createdById);
 
@@ -51,9 +53,8 @@ public class TasksController : ControllerBase
         Guid id,
         UpdateTaskDto dto)
     {
-        // Temporário até JWT estar pronto
-        var requestingUserId = Guid.NewGuid();
-        var requestingUserRole = "Admin";
+        var requestingUserId = GetAuthenticatedUserId();
+        var requestingUserRole = GetAuthenticatedUserRole();
 
         var task = await _taskService.UpdateAsync(
             id,
@@ -67,9 +68,8 @@ public class TasksController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // Temporário até JWT estar pronto
-        var requestingUserId = Guid.NewGuid();
-        var requestingUserRole = "Admin";
+        var requestingUserId = GetAuthenticatedUserId();
+        var requestingUserRole = GetAuthenticatedUserRole();
 
         await _taskService.DeleteAsync(
             id,
@@ -77,5 +77,16 @@ public class TasksController : ControllerBase
             requestingUserRole);
 
         return NoContent();
+    }
+
+    private Guid GetAuthenticatedUserId()
+    {
+        return Guid.Parse(
+            User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    }
+
+    private string GetAuthenticatedUserRole()
+    {
+        return User.FindFirst(ClaimTypes.Role)!.Value;
     }
 }
