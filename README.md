@@ -26,7 +26,7 @@ API desenvolvida em **.NET 8** seguindo as diretrizes e boas práticas de **Clea
 
 ---
 
-## 🏗️ Guia de Execução (Tutorial Docker)
+##  Guia de Execução (Tutorial Docker)
 
 Toda a aplicação agora roda dentro do Docker. Você não precisa instalar o PostgreSQL localmente na sua máquina física, o Docker subirá o banco e a API configurados.
 
@@ -43,7 +43,7 @@ docker compose up -d --build
 ### 3. Acessando a API e o Swagger
 Uma vez inicializados os containers:
 * O Swagger (documentação interativa da API) estará disponível no endereço:
-  👉 **`http://localhost:5000/swagger`**
+  **`http://localhost:5000/swagger`**
 * O banco de dados PostgreSQL estará exposto na porta **`5433`** do seu host (para conexões externas usando DBeaver, pgAdmin, etc.).
 
 ### 4. Principais Comandos do Docker
@@ -62,7 +62,7 @@ Uma vez inicializados os containers:
 
 ---
 
-## 🧪 Como Rodar os Testes Unitários
+##  Como Rodar os Testes Unitários
 
 Caso possua o .NET SDK instalado localmente e queira rodar a suíte de testes unitários:
 
@@ -72,7 +72,7 @@ dotnet test
 
 ---
 
-## 🔑 Fluxo de Teste no Swagger (Passo a Passo)
+##  Fluxo de Teste no Swagger (Passo a Passo)
 
 1. Vá em `/api/users` (POST) e registre um novo usuário.
 2. Acesse `/api/auth/login` (POST) com as credenciais que você acabou de criar.
