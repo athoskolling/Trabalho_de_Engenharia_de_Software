@@ -1,4 +1,4 @@
-# 📋 Relatório Técnico e Documentação de Arquitetura — Trabalho T2
+# Relatório Técnico e Documentação de Arquitetura — Trabalho T2
 
 **Sistema de Gestão de Tarefas Colaborativas — TaskManager API**  
 **Disciplina:** Engenharia de Software — Arquitetura e Padrões (UNISINOS)  
@@ -56,6 +56,14 @@ Nós optamos pela utilização da **Clean Architecture** devido aos seguintes fa
 *   **LSP (Liskov Substitution Principle):** A substituição do banco PostgreSQL pelo provedor em memória (`InMemory`) funciona perfeitamente sem quebrar as interfaces ou a lógica interna de consultas da API.
 *   **ISP (Interface Segregation Principle):** Em vez de interfaces genéricas monolíticas, cada repositório é restrito às operações específicas de sua respectiva entidade (ex: `IRefreshTokenRepository` possui apenas operações de persistência e expiração do token).
 *   **DIP (Dependency Inversion Principle):** A nossa camada de aplicação não referencia a camada de infraestrutura. Ela referencia apenas as interfaces do domínio. A infraestrutura implementa essas interfaces, e a injeção é resolvida no `Program.cs`.
+
+### 3.3 Justificativa da Escolha da Stack Tecnológica
+A escolha das tecnologias baseou-se nos seguintes critérios de engenharia de software:
+*   **PostgreSQL (v15):** Escolhemos o PostgreSQL por ser um banco de dados relacional de código aberto extremamente maduro, estável e robusto. Nosso sistema de gestão de tarefas possui forte integridade referencial e relacionamentos complexos de propriedade e atribuição entre as entidades (como usuários, tarefas e comentários). Optamos por um banco relacional (e rejeitamos abordagens NoSQL orientadas a documentos como o MongoDB) para garantir a consistência dos dados, transações ACID e restrições de chaves estrangeiras rígidas.
+*   **Entity Framework Core (v8):** Adotamos o EF Core como nosso mapeador objeto-relacional (ORM) por sua produtividade com a abordagem Code-First. Ele nos permite gerenciar o esquema de banco de dados diretamente pelo C# e automatizar o controle de migrações. Além disso, o suporte ao provedor In-Memory facilita a execução de testes rápidos de integração e o desenvolvimento local ágil.
+*   **JWT Bearer (JSON Web Tokens):** Escolhemos a autenticação baseada em JWT para viabilizar um controle de sessões stateless e descentralizado. A API não necessita manter estados de sessão na memória RAM do servidor, tornando-a altamente escalável e segura.
+*   **BCrypt.Net-Next:** Adotamos o BCrypt para o hashing de senhas dos usuários devido à sua robustez contra ataques de dicionário e força bruta (através de salting automático e fator de custo de processamento ajustável), superando algoritmos de criptografia rápida como MD5 ou SHA256.
+*   **FluentValidation:** Escolhemos essa biblioteca para desacoplar as regras de validação das rotas e dos controladores HTTP, permitindo declarar regras de negócio expressivas e mantendo o SRP (Single Responsibility Principle) nas DTOs.
 
 ---
 
@@ -274,7 +282,7 @@ Para testes locais rápidos sem Docker ou dependências locais:
 1.  **Parâmetro de Ativação:** No nosso arquivo `appsettings.Development.json`, a flag `"UseInMemoryDatabase"` está configurada como `"true"`.
 2.  **Mecanismo de Ação:** O `Program.cs` desvia o registro do banco de dados para o provedor `InMemoryDatabase` do Entity Framework. A inicialização não executa as Migrations físicas e executa o `EnsureCreated()`, criando todo o esquema de tabelas na RAM instantaneamente de forma automática.
 3.  **Portas de Execução:** O servidor do Kestrel rodará por padrão no endereço:
-    👉 **`http://localhost:5261/swagger`**
+    **`http://localhost:5261/swagger`**
 
 ---
 

@@ -1,4 +1,4 @@
-# 📋 TaskManager API — Sistema de Gestão de Tarefas Colaborativas
+# TaskManager API — Sistema de Gestão de Tarefas Colaborativas
 
 Trabalho Acadêmico T2 — Disciplina de Engenharia de Software: Arquitetura e Padrões (UNISINOS)  
 **Professor:** Guilherme Silva de Lacerda  
