@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using TaskManager.Application.Validators;
+using TaskManager.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -145,6 +146,9 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
+// Middlewares
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Swagger
 app.UseSwagger();
